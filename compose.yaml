@@ -1,0 +1,71 @@
+services:
+  media-placement:
+    image: local/media-placement:${MEDIA_PLACEMENT_VERSION:-dev}
+    build: .
+    pull_policy: never
+    user: "${PUID:-1012}:${PGID:-1012}"
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 60s
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    volumes:
+      - type: bind
+        source: ./config.toml
+        target: /config/config.toml
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./state
+        target: /state
+        bind:
+          create_host_path: false
+      # Match config.example.toml. These must already be physical disk mounts.
+      # Use identical /storage paths in Radarr, Sonarr, and Deluge (RW there).
+      - type: bind
+        source: /mnt/00
+        target: /storage/disk00
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: /mnt/01
+        target: /storage/disk01
+        read_only: true
+        bind:
+          create_host_path: false
+    secrets:
+      - webhook-token
+      - radarr-api-key
+      - sonarr-api-key
+      - deluge-web-password
+    networks: [mediaserver]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 60s
+      retries: 3
+    logging:
+      driver: local
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  mediaserver:
+    external: true
+
+secrets:
+  webhook-token:
+    file: ./secrets/webhook-token
+  radarr-api-key:
+    file: ./secrets/radarr-api-key
+  sonarr-api-key:
+    file: ./secrets/sonarr-api-key
+  deluge-web-password:
+    file: ./secrets/deluge-web-password

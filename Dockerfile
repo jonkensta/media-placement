@@ -1,0 +1,10 @@
+FROM python:3.13-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app
+WORKDIR /app
+COPY src/ /app/
+USER 1000:1000
+EXPOSE 8080
+ENTRYPOINT ["python", "-m", "media_placement"]

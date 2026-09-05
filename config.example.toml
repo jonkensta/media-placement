@@ -1,0 +1,42 @@
+[server]
+# Observation performs upstream reads only. Apply must be enabled explicitly.
+mode = "observe"
+host = "0.0.0.0"
+port = 8080
+database = "/state/jobs.sqlite3"
+token_file = "/run/secrets/webhook-token"
+poll_seconds = 10
+reconcile_seconds = 60
+timeout_seconds = 10
+
+[deluge]
+# Deluge shares Gluetun's network namespace in the mediacenter stack.
+# This is the Deluge WEB password, not a daemon RPC password or Gluetun key.
+url = "http://gluetun:8112"
+password_file = "/run/secrets/deluge-web-password"
+
+[apps.radarr]
+url = "http://radarr:7878"
+api_key_file = "/run/secrets/radarr-api-key"
+download_client = "Deluge Placement"
+label = "radarr-placement"
+library = "Movies"
+
+[apps.sonarr]
+url = "http://sonarr:8989"
+api_key_file = "/run/secrets/sonarr-api-key"
+download_client = "Deluge Placement"
+label = "sonarr-placement"
+library = "TV"
+
+[[disks]]
+name = "disk00"
+path = "/storage/disk00"
+downloads = "Downloads"
+reserve_bytes = 53687091200 # 50 GiB, in addition to outstanding reservations
+
+[[disks]]
+name = "disk01"
+path = "/storage/disk01"
+downloads = "Downloads"
+reserve_bytes = 53687091200

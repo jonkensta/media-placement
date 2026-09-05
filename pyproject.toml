@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=77,<83"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "media-placement"
+version = "0.1.0"
+description = "Coordinate Deluge download placement with Radarr and Sonarr library disks"
+requires-python = ">=3.11"
+license = "MIT"
+readme = "README.md"
+authors = [{name = "Jonathan Starr"}]
+dependencies = []
+
+[project.scripts]
+media-placement = "media_placement.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
