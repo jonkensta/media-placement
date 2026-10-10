@@ -24,7 +24,8 @@ services:
         target: /state
         bind:
           create_host_path: false
-      # Match config.example.toml. These must already be physical disk mounts.
+      # Match local config.toml: seven active disks; /mnt/06 is retired.
+      # These must already be physical disk mounts.
       # Use identical /storage paths in Radarr, Sonarr, and Deluge (RW there).
       - type: bind
         source: /mnt/00
@@ -35,6 +36,36 @@ services:
       - type: bind
         source: /mnt/01
         target: /storage/disk01
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: /mnt/02
+        target: /storage/disk02
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: /mnt/03
+        target: /storage/disk03
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: /mnt/04
+        target: /storage/disk04
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: /mnt/05
+        target: /storage/disk05
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: /mnt/07
+        target: /storage/disk07
         read_only: true
         bind:
           create_host_path: false
