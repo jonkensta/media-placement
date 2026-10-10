@@ -196,7 +196,7 @@ updates. It does not deploy or publish images. `make image` tags the image with
 the current commit; use a clean checkout for releases. Compose uses
 `pull_policy: never` for the locally built image.
 
-The mediacenter repository can later own this service's deployment configuration
+The mediaserver repository can later own this service's deployment configuration
 and pinned image tag. This repository currently includes a standalone Compose
 example for the pilot, without modifying an existing media stack.
 
